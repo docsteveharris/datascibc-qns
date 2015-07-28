@@ -1,49 +1,6 @@
 # author: Steve Harris
 # date: 2015-07-24
-# subject: How to calculate the estimator
-
-# Readme
-# ======
-# Near/far matching and IV analysis
-# - Create those matches with the greatest possible treatment separation
-#   so use patients admitted when there are 'no' beds and compare to those
-#   admitted when there are two or even three plus beds.
-# - Do this within hospitals? To ensure that the instrument really
-#   represents a random event
-
-# How to think about instrumental variables
-# -----------------------------------------
-# http://andrewgelman.com/2007/12/09/how_to_think_ab/
-
-
-# The trick: how to think about IV’s without getting too confused
-
-# Suppose z is your instrument, T is your treatment, and y is your
-# outcome. So the causal model is z -> T -> y. The trick is to think of
-# (T,y) as a joint outcome and to think of the effect of z on each. For
-# example, an increase of 1 in z is associated with an increase of 0.8 in
-# T and an increase of 10 in y. The usual “instrumental variables” summary
-# is to just say the estimated effect of T on y is 10/0.8=12.5, but I’d
-# rather just keep it separate and report the effects on T and y
-# separately.
-
-# In Piero’s example, this translates into two statements: (a) States with
-# higher penalties for murder had higher penalties for defamation, and (b)
-# States with higher penalties for murder had less reporting of
-# corruption.
-
-# Todo
-# ====
-# TODO: 2015-07-28 - [ ] post to SO to ask how to calculate the IV ratio
-
-
-
-# Log
-# ===
-# 2015-07-23
-# - file duplicatd from prev labbook
-# 2015-07-28
-# - modified from 150724 for posting to SO
+# subject: How to calculate the estimator?
 
 
 rm(list=ls(all=TRUE))

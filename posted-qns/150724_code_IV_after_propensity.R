@@ -70,8 +70,12 @@ mdt <- data.table(
     y1=tdf[row.names(matchit.out$match.matrix), 'dead'])
 mdt[,id.pair := .I, by=.I]
 head(mdt,10)
+
+# Simple paired t-test    
 with(mdt, t.test(d1, d0, paired=TRUE))
 with(mdt, t.test(y1, y0, paired=TRUE))
+
+
 
 library(reshape2)
 mdt.wide <- melt(mdt, id.vars='id.pair')

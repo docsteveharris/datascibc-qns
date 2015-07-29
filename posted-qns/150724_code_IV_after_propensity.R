@@ -4,45 +4,6 @@
 
 
 rm(list=ls(all=TRUE))
-library(data.table)
-setwd('/Users/steve/aor/p-me/stackexchange/paper-spotearly')
-source("project_paths.r")
-# Load data
-load(paste0(PATH_DATA, '/paper-spotearly.RData'))
-ls()
-
-# Basic selection model 
-# ----------------------
-vars    <- c('age', 'male', 'sepsis_dx', 'v_ccmds', 
-            'icnarc_score', 'id',
-            'dead90', 'open_beds_max', 'icu_accept')
-tdt <- wdt[,vars, with=FALSE]
-tdt[, discourage := ifelse(open_beds_max<=0,1,ifelse(open_beds_max>=3,0,NA))]
-str(tdt)
-
-# Now save a sub-sample of the data
-# ---------------------------------
-setnames(tdt, 'sepsis_dx', 'diagnosis')
-setnames(tdt, 'v_ccmds', 'ward')
-setnames(tdt, 'v_ccmds', 'ward')
-setnames(tdt, 'icnarc_score', 'illness')
-setnames(tdt, 'dead90', 'dead')
-setnames(tdt, 'icu_accept', 'treat')
-tdt[,open_beds_max:=NULL]
-tdt <- tdt[id<=1000]
-str(tdt)
-
-# Data now ready for posting 
-setwd('/Users/steve/aor/p-me/stackexchange')
-getwd()
-write.csv(tdt, file="posted-data/150728_qn.csv")
-
-
-
-# Now write your question
-# -----------------------
-
-rm(list=ls(all=TRUE))
 library(RCurl)
 library(data.table)
 library(MatchIt)
@@ -76,7 +37,6 @@ with(mdt, t.test(d1, d0, paired=TRUE))
 with(mdt, t.test(y1, y0, paired=TRUE))
 
 
-
 library(reshape2)
 mdt.wide <- melt(mdt, id.vars='id.pair')
 mdt.wide[, pair := ifelse(grepl('.*0', variable), 0, 1)]
@@ -87,27 +47,3 @@ mdt.long <- dcast.data.table(mdt.wide, id.pair + pair ~ varname)
 mdt.match <- match.data(matchit.out)
 with(mdt.match, table(treat, discourage)) # treatment is 'discouraged'
 with(mdt.match, table(dead, discourage))  # mortality is lower when discouraged
-
-#  ===============================================
-#  = Rough working not posted to stoack overlfow
-#  ===============================================
-# rough
-stop()
-# Panel data linear regression
-m <- lm(y ~ d + as.factor(id.pair), data=mdt.long)
-summary(m)
-library(plm)
-mdt.panel <- pdata.frame(mdt.long, index='id.pair')
-head(mdt.panel)
-
-library(nlme)
-library(lme4)
-head(mdt.long)
-m <- lmer(y ~ d | id.pair, data=mdt.long)
-m
-
-# Now how to get at the IV estimate
-library(ARM)
-m <- ivreg(dead ~ treat | discourage, data=mdt.match)
-summary(m)
-

@@ -84,3 +84,26 @@ mdt.match <- match.data(matchit.out)
 with(mdt.match, table(treat, discourage)) # treatment is 'discouraged'
 with(mdt.match, table(dead, discourage))  # mortality is lower when discouraged
 
+#  ===============================================
+#  = Rough working not posted to stoack overlfow
+#  ===============================================
+# rough
+stop()
+# Panel data linear regression
+m <- lm(y ~ d + as.factor(id.pair), data=mdt.long)
+summary(m)
+library(plm)
+mdt.panel <- pdata.frame(mdt.long, index='id.pair')
+head(mdt.panel)
+
+library(nlme)
+library(lme4)
+head(mdt.long)
+m <- lmer(y ~ d | id.pair, data=mdt.long)
+m
+
+# Now how to get at the IV estimate
+library(ARM)
+m <- ivreg(dead ~ treat | discourage, data=mdt.match)
+summary(m)
+
